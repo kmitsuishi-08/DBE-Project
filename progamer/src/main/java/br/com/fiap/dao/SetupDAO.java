@@ -36,4 +36,10 @@ public class SetupDAO {
 		manager.flush();
 		manager.getTransaction().commit();
 	}
+	
+	public void remove(Setup setup) {
+		manager.getTransaction().begin();
+		manager.remove(setup);
+		manager.getTransaction().commit();
+	}
 }

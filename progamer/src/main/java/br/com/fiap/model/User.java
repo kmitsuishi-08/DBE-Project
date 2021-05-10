@@ -1,15 +1,14 @@
 package br.com.fiap.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "TB_USER")
@@ -21,14 +20,18 @@ public class User {
 	private Long id;
 	private String name;
 
-	@Temporal(TemporalType.DATE)
-	private Date birthDate;
-	
+	@JsonbDateFormat(value = "yyyy-MM-dd")
+	private LocalDate birthDate;
+
 	private String email;
 	private String password;
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -39,14 +42,14 @@ public class User {
 		this.name = name;
 	}
 
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -65,7 +68,6 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [Name=" + name + ", date=" + birthDate + ", email=" + email
-				+ ", password=" + password + "]";
+		return "User [Name=" + name + ", date=" + birthDate + ", email=" + email + ", password=" + password + "]";
 	}
 }

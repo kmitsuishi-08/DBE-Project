@@ -13,26 +13,21 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.com.fiap.dao.SetupDAO;
-import br.com.fiap.model.Setup;
+import br.com.fiap.dao.UserDAO;
+import br.com.fiap.model.User;
 
-@Path("/setups")
+@Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
-public class SetupEndpoint {
+public class UserEndpoint {
 
-	private SetupDAO dao = new SetupDAO();
-
-	/*
-	 * //Endpoint test
-	 * 
-	 * @GET public void execute() { System.out.println("Execute API"); }
-	 */
+	private UserDAO dao = new UserDAO();
 
 	@GET
 	public Response index() {
 		try {
-			List<Setup> setups = dao.getAll();
-			return Response.status(Response.Status.OK).entity(setups).build();
+			List<User> users = dao.getAll();
+			users.forEach(x->x.setPassword("***"));
+			return Response.status(Response.Status.OK).entity(users).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
@@ -40,12 +35,12 @@ public class SetupEndpoint {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response create(Setup setup) {
-		if (setup == null)
+	public Response create(User user) {
+		if (user == null)
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		try {
-			dao.save(setup);
-			return Response.status(Response.Status.CREATED).entity(setup).build();
+			dao.save(user);
+			return Response.status(Response.Status.CREATED).entity(user).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
@@ -54,50 +49,50 @@ public class SetupEndpoint {
 	@GET
 	@Path("{id}")
 	public Response show(@PathParam("id") Long id) {
-		Setup setup = dao.findById(id);
-		if (setup == null)
+		User user = dao.findById(id);
+		if (user == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
-		return Response.status(Response.Status.OK).entity(setup).build();
+		user.setPassword("***");
+		return Response.status(Response.Status.OK).entity(user).build();
 	}
 
 	@PUT
 	@Path("{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") Long id, Setup setup) {
+	public Response update(@PathParam("id") Long id, User user) {
 		if (id == null)
 			return Response.status(Response.Status.BAD_REQUEST).build();
-		if (setup == null)
+		if (user == null)
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		if (dao.findById(id) == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
-		setup.setId(id);
+		user.setId(id);
 		try {
-			dao.update(setup);
-			return Response.status(Response.Status.OK).entity(setup).build();
+			dao.update(user);
+			return Response.status(Response.Status.OK).entity(user).build();
 
 		} catch (Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
+
 	@DELETE
 	@Path("{id}")
 	public Response delete(@PathParam("id") Long id) {
 		if (id == null)
 			return Response.status(Response.Status.BAD_REQUEST).build();
-		
-		Setup setup = dao.findById(id);
-		
-		if (setup == null)
+
+		User user = dao.findById(id);
+
+		if (user == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
-		
+
 		try {
-			dao.remove(setup);
+			dao.remove(user);
 			return Response.status(Response.Status.OK).build();
 
 		} catch (Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-
 }
