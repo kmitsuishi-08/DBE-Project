@@ -44,4 +44,20 @@ public class UserDAO {
 		manager.getTransaction().commit();
 	}
 
+	public boolean exist(User user) {
+		TypedQuery<User> query = manager.
+				createQuery("SELECT u FROM User u WHERE email=:email AND password=:password", User.class);
+		
+		query.setParameter("email", user.getEmail());
+		query.setParameter("password", user.getPassword());
+	
+		User result;
+		try {
+			result = query.getSingleResult();
+			return result != null;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 }
