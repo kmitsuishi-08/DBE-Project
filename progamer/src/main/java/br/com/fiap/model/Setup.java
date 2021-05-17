@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -17,6 +19,11 @@ public class Setup {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "setup")
 	private Long id;
+	
+	@ManyToOne
+	@JoinColumn(name = "userId", nullable = false)
+	private User user;
+	
 	private String name;
 	private String description;
 	private BigDecimal price = new BigDecimal(1000);
@@ -54,6 +61,14 @@ public class Setup {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

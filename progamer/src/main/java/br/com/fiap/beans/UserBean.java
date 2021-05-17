@@ -9,18 +9,23 @@ import javax.inject.Named;
 
 import br.com.fiap.dao.UserDAO;
 import br.com.fiap.model.User;
+import br.com.fiap.util.SessionContextUtil;
 
 @Named
 @RequestScoped
 public class UserBean {
 
 	private User user = new User();
+	private FacesContext context;
+
+	public UserBean() {
+		context = FacesContext.getCurrentInstance();
+	}
 
 	public void save() {
 		new UserDAO().save(this.user);
-		user = new User();
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User successfully registered"));
-		System.out.println("Saving user..." + this.user);
+		this.user = new User();
+		context.addMessage(null, new FacesMessage("User successfully registered"));
 	}
 
 	public List<User> getUsers() {
@@ -40,23 +45,19 @@ public class UserBean {
 	}
 
 	public String login() {
-
-		boolean exist = new UserDAO().exist(this.user);
-		if (exist) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", user);
+		user = new UserDAO().getUserByEmailAndPassword(user.getEmail(), user.getPassword());
+		if (user != null) {
+			context.getExternalContext().getSessionMap().put("user", user);
 			return "index?faces-redirect=true";
 		} else {
-			FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Inválido", "Erro"));
-
+			context.getExternalContext().getFlash().setKeepMessages(true);
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Inválido", "Erro"));
 			return "login?faces-redirect=true";
 		}
-
 	}
 
 	public String logout() {
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("user");
+		SessionContextUtil.removeUserSession();
 		return "login?faces-redirect=true";
 	}
 

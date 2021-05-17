@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.fiap.model.Setup;
 import br.com.fiap.model.User;
 import br.com.fiap.util.EntityManagerFactorySingleton;
 
@@ -17,7 +16,6 @@ public class UserDAO {
 		manager.getTransaction().begin();
 		manager.persist(user);
 		manager.getTransaction().commit();
-
 		manager.close();
 	}
 
@@ -44,19 +42,17 @@ public class UserDAO {
 		manager.getTransaction().commit();
 	}
 
-	public boolean exist(User user) {
-		TypedQuery<User> query = manager.
-				createQuery("SELECT u FROM User u WHERE email=:email AND password=:password", User.class);
-		
-		query.setParameter("email", user.getEmail());
-		query.setParameter("password", user.getPassword());
-	
-		User result;
+	public User getUserByEmailAndPassword(String email, String password) {
+		TypedQuery<User> query = manager.createQuery("SELECT u FROM User u WHERE email=:email AND password=:password",
+				User.class);
+
+		query.setParameter("email", email);
+		query.setParameter("password", password);
+
 		try {
-			result = query.getSingleResult();
-			return result != null;
+			return query.getSingleResult();
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
 	}
 

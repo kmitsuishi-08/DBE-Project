@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.core.Response;
 
 import br.com.fiap.model.Setup;
+import br.com.fiap.model.User;
 import br.com.fiap.util.EntityManagerFactorySingleton;
 
 public class SetupDAO {
@@ -17,7 +17,13 @@ public class SetupDAO {
 		manager.getTransaction().begin();
 		manager.persist(setup);
 		manager.getTransaction().commit();
-		manager.close();
+	}
+
+	public List<Setup> getAllByUser(User user) {
+		String jpql = "SELECT s FROM Setup s WHERE s.user = :user";
+		TypedQuery<Setup> createQuery = manager.createQuery(jpql, Setup.class);
+		createQuery.setParameter("user", user);
+		return createQuery.getResultList();
 	}
 
 	public List<Setup> getAll() {
@@ -36,7 +42,7 @@ public class SetupDAO {
 		manager.flush();
 		manager.getTransaction().commit();
 	}
-	
+
 	public void remove(Setup setup) {
 		manager.getTransaction().begin();
 		manager.remove(setup);

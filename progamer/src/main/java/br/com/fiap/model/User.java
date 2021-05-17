@@ -1,12 +1,17 @@
 package br.com.fiap.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.json.bind.annotation.JsonbDateFormat;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -25,6 +30,17 @@ public class User {
 
 	private String email;
 	private String password;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	private List<Setup> setups;
+
+	public void addSetup(Setup setup) {
+		if (setups == null)
+			setups = new ArrayList<>();
+		setups.add(setup);
+		
+		setup.setUser(this);
+	}
 
 	public Long getId() {
 		return id;
