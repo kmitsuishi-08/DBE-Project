@@ -26,7 +26,6 @@ public class UserEndpoint {
 	public Response index() {
 		try {
 			List<User> users = dao.getAll();
-			users.forEach(x->x.setPassword("***"));
 			return Response.status(Response.Status.OK).entity(users).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -52,7 +51,6 @@ public class UserEndpoint {
 		User user = dao.findById(id);
 		if (user == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
-		user.setPassword("***");
 		return Response.status(Response.Status.OK).entity(user).build();
 	}
 

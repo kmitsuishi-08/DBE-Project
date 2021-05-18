@@ -76,7 +76,7 @@
         <version>1.0.0-RC2</version>
     </dependency>
 
-    <!-- Yasson (JSON-B RI) -->
+	<!-- Yasson (JSON-B RI) -->
     <dependency>
         <groupId>org.eclipse</groupId>
         <artifactId>yasson</artifactId>

@@ -20,7 +20,7 @@ public class UserDAO {
 	}
 
 	public List<User> getAll() {
-		String jpql = "SELECT u FROM User u";
+		String jpql = "SELECT new User(u.id, u.name, u.birthDate, u.email) FROM User u";
 		TypedQuery<User> createQuery = manager.createQuery(jpql, User.class);
 		return createQuery.getResultList();
 	}

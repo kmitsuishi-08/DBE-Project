@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.bind.annotation.JsonbDateFormat;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,11 +30,24 @@ public class User {
 	private LocalDate birthDate;
 
 	private String email;
-	
+
 	private String password;
 
+	@JsonbTransient
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Setup> setups;
+
+	public User() {
+		
+	}
+	
+	public User(Long id, String name, LocalDate birthDate, String email) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.email = email;
+	}
 
 	public void addSetup(Setup setup) {
 		if (setups == null)

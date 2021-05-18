@@ -32,7 +32,7 @@ public class SetupEndpoint {
 	public Response index() {
 		try {
 			List<Setup> setups = dao.getAll();
-			setups.forEach(s->s.getUser().setPassword("***"));
+			setups.forEach(u->u.getUser().setPassword(null));
 			return Response.status(Response.Status.OK).entity(setups).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
