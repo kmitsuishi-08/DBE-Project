@@ -29,9 +29,10 @@ public class User {
 	private LocalDate birthDate;
 
 	private String email;
+	
 	private String password;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Setup> setups;
 
 	public void addSetup(Setup setup) {

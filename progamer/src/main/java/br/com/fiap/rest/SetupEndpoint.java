@@ -32,6 +32,7 @@ public class SetupEndpoint {
 	public Response index() {
 		try {
 			List<Setup> setups = dao.getAll();
+			setups.forEach(s->s.getUser().setPassword("***"));
 			return Response.status(Response.Status.OK).entity(setups).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -87,7 +88,7 @@ public class SetupEndpoint {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		
 		Setup setup = dao.findById(id);
-		
+
 		if (setup == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
 		
